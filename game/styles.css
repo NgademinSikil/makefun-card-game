@@ -1,0 +1,151 @@
+/* Ember Duel — table, cards and overlays. All art is CSS: no images, no web fonts. */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: #17110b;
+  color: #f3e9d2;
+  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+}
+#table {
+  width: 1240px; max-width: 100%;
+  margin: 0 auto; padding: 10px 18px 14px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #3a2417 0%, #241610 55%, #17110b 100%);
+  border-left: 2px solid #6b4a2f; border-right: 2px solid #6b4a2f;
+  min-height: 100vh;
+}
+#table-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 2px solid #6b4a2f; padding: 4px 2px 8px;
+}
+#game-title-small { font-size: 22px; letter-spacing: 6px; color: #ffb347; font-weight: bold; }
+#turn-banner { font-size: 20px; font-style: italic; color: #ffe9b8; }
+#round-label { font-size: 16px; color: #c9a06a; }
+
+/* Fighter panels (HP, block, mana) */
+.fighter { min-width: 300px; }
+.fighter-name { font-size: 20px; font-weight: bold; margin-bottom: 6px; }
+.block-badge {
+  display: inline-block; background: #1d4e89; color: #dbeafe;
+  border-radius: 12px; padding: 1px 9px; font-size: 14px; margin-left: 8px;
+}
+.hp-bar {
+  height: 20px; background: #3d2b1d; border: 2px solid #6b4a2f;
+  border-radius: 10px; overflow: hidden;
+}
+.hp-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #d43d2a, #ff7a45); transition: width .45s ease; }
+.hp-fill.low { background: linear-gradient(90deg, #8f1d12, #d43d2a); }
+.hp-text { font-size: 15px; margin-top: 3px; color: #ffe9b8; }
+.mana-row { margin-top: 6px; min-height: 18px; }
+.mana-dot {
+  display: inline-block; width: 16px; height: 16px; margin-right: 5px;
+  border-radius: 50%; background: #2c4a7c; border: 2px solid #5b7fb8;
+}
+.mana-dot.spent { background: #241a12; border-color: #4a3826; }
+.deck-counts { font-size: 14px; color: #c9a06a; margin-top: 4px; }
+.deck-counts span { margin-right: 14px; }
+
+/* Zones */
+#enemy-zone, #player-zone { display: flex; gap: 18px; align-items: center; padding: 12px 4px; }
+#enemy-hand, #player-hand { display: flex; gap: 10px; flex: 1; min-height: 132px; align-items: center; }
+#enemy-portrait, #player-portrait {
+  width: 74px; height: 74px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: bold; color: #fff;
+  border: 3px solid #ffb347;
+}
+#enemy-portrait { background: radial-gradient(circle at 35% 30%, #7b2f8b, #3d1450); }
+#player-portrait { background: radial-gradient(circle at 35% 30%, #ff7a45, #8f2a10); }
+#middle { display: flex; gap: 16px; padding: 6px 4px; border-top: 1px solid #4a3826; border-bottom: 1px solid #4a3826; min-height: 92px; }
+#played-area { flex: 1; display: flex; gap: 10px; align-items: center; justify-content: center; }
+#battle-log {
+  width: 340px; margin: 0; padding: 6px 10px 6px 26px; list-style: none;
+  font-size: 14px; color: #e8d5ae; background: rgba(0,0,0,.25); border-radius: 8px;
+}
+#battle-log li { padding: 1px 0; }
+#battle-log li:first-child { color: #ffb347; }
+
+/* Cards */
+.card {
+  width: 118px; height: 168px; flex: none; position: relative;
+  border-radius: 10px; padding: 8px; cursor: pointer;
+  background: linear-gradient(160deg, #fdf6e3, #e8d9b0);
+  color: #241a12; border: 3px solid #8a6d3b;
+  box-shadow: 0 4px 10px rgba(0,0,0,.55);
+  transition: transform .16s ease, box-shadow .16s ease;
+  font-family: Georgia, 'Times New Roman', serif; text-align: left;
+}
+.card:hover:not(:disabled) { transform: translateY(-12px); box-shadow: 0 10px 18px rgba(0,0,0,.65); }
+.card:disabled { cursor: not-allowed; opacity: .55; filter: grayscale(.5); }
+.card .cost {
+  position: absolute; top: -8px; left: -8px; width: 30px; height: 30px;
+  border-radius: 50%; background: #1d4e89; color: #fff; border: 2px solid #dbeafe;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: bold;
+}
+.card .suit { font-size: 22px; line-height: 1; }
+.card.suit-attack .suit { color: #c22e1f; }
+.card.suit-guard .suit { color: #1d4e89; }
+.card.suit-mend .suit { color: #2e7d32; }
+.card.suit-surge .suit { color: #b26a00; }
+.card .card-name { font-size: 15px; font-weight: bold; margin: 6px 0 4px; line-height: 1.15; }
+.card .card-value { font-size: 26px; font-weight: bold; }
+.card .card-text { font-size: 12.5px; line-height: 1.3; color: #4a3826; margin-top: 4px; }
+.card .card-key { position: absolute; bottom: 5px; right: 8px; font-size: 11px; color: #8a6d3b; }
+.card.face-down {
+  background: repeating-linear-gradient(45deg, #4a2350, #4a2350 10px, #5b2d63 10px, #5b2d63 20px);
+  border-color: #2c1233; cursor: default;
+}
+.card.face-down:hover { transform: none; box-shadow: 0 4px 10px rgba(0,0,0,.55); }
+.card.played { animation: play-pop .5s ease; }
+@keyframes play-pop { 0% { transform: scale(1.25) rotate(-4deg); } 100% { transform: scale(1); } }
+.floater {
+  position: absolute; font-size: 30px; font-weight: bold; color: #ff5a3c;
+  text-shadow: 0 2px 4px #000; animation: float-up 1s ease forwards; pointer-events: none;
+}
+.floater.heal { color: #7ee787; }
+.floater.block { color: #7db8ff; }
+@keyframes float-up { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-46px); } }
+
+#end-turn {
+  flex: none; padding: 12px 20px; font-size: 18px; font-family: Georgia, serif;
+  background: #b26a00; color: #fff; border: 2px solid #ffd27d; border-radius: 10px; cursor: pointer;
+}
+#end-turn:hover:not(:disabled) { background: #d18a1d; }
+#end-turn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Overlays: title and end screens */
+.overlay {
+  position: fixed; inset: 0; background: rgba(10, 6, 3, .88);
+  display: flex; align-items: center; justify-content: center; z-index: 10;
+}
+.overlay[hidden] { display: none; }
+.overlay-card {
+  width: 620px; max-width: 92vw; text-align: center; padding: 30px 36px;
+  background: linear-gradient(170deg, #2c1c10, #1a1008);
+  border: 3px solid #8a6d3b; border-radius: 16px;
+}
+.overlay-kicker { letter-spacing: 4px; color: #ffb347; font-size: 14px; margin: 0 0 6px; }
+.overlay-card h1 { font-size: 58px; line-height: .95; margin: 0 0 12px; color: #ffe9b8; letter-spacing: 4px; }
+.overlay-sub { font-size: 17px; line-height: 1.5; color: #e8d5ae; }
+.overlay-stats { font-size: 15px; color: #c9a06a; }
+.overlay-card button {
+  margin-top: 10px; padding: 13px 30px; font-size: 20px; font-family: Georgia, serif;
+  background: #c22e1f; color: #fff; border: 2px solid #ffb347; border-radius: 12px; cursor: pointer;
+}
+.overlay-card button:hover { background: #e0452f; }
+.how-to { text-align: left; margin: 18px auto 4px; max-width: 500px; font-size: 15px; line-height: 1.45; }
+.how-to h2 { font-size: 17px; margin: 0 0 6px; color: #ffb347; }
+.how-to ul { margin: 0; padding-left: 20px; }
+.how-to li { margin-bottom: 5px; }
+.suit-demo { font-size: 17px; }
+.suit-demo.suit-attack { color: #ff8a70; }
+.suit-demo.suit-guard { color: #7db8ff; }
+.suit-demo.suit-mend { color: #7ee787; }
+.suit-demo.suit-surge { color: #ffd27d; }
+kbd {
+  background: #3d2b1d; border: 1px solid #8a6d3b; border-radius: 4px;
+  padding: 0 5px; font-family: Georgia, serif;
+}
+.overlay-foot { font-size: 13px; color: #8a6d3b; margin-top: 16px; }

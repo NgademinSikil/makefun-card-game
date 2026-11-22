@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ember Duel — a turn-based card battler</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div id="table">
+  <header id="table-head">
+    <div id="game-title-small">EMBER DUEL</div>
+    <div id="turn-banner">Your turn</div>
+    <div id="round-label">Round 1</div>
+  </header>
+
+  <section id="enemy-zone" aria-label="Opponent">
+    <div id="enemy-portrait" title="Cinder Witch">CW</div>
+    <div class="fighter">
+      <div class="fighter-name"><span id="enemy-name">Cinder Witch</span>
+        <span class="block-badge" id="enemy-block" hidden>🛡 <b id="enemy-block-value">0</b></span>
+      </div>
+      <div class="hp-bar" id="enemy-hp-bar"><div class="hp-fill" id="enemy-hp-fill"></div></div>
+      <div class="hp-text"><span id="enemy-hp">30</span> / 30 HP</div>
+      <div class="mana-row" id="enemy-mana"></div>
+    </div>
+    <div id="enemy-hand" aria-label="Opponent hand"></div>
+  </section>
+
+  <section id="middle">
+    <div id="played-area" aria-label="Last played cards"></div>
+    <ol id="battle-log" aria-label="Battle log"></ol>
+  </section>
+
+  <section id="player-zone" aria-label="Player">
+    <div id="player-hand" aria-label="Your hand"></div>
+    <div class="fighter">
+      <div class="fighter-name"><span id="player-name">Ember Knight</span>
+        <span class="block-badge" id="player-block" hidden>🛡 <b id="player-block-value">0</b></span>
+      </div>
+      <div class="hp-bar" id="player-hp-bar"><div class="hp-fill" id="player-hp-fill"></div></div>
+      <div class="hp-text"><span id="player-hp">30</span> / 30 HP</div>
+      <div class="mana-row" id="player-mana"></div>
+      <div class="deck-counts">
+        <span>Deck <b id="player-deck-count">0</b></span>
+        <span>Discard <b id="player-discard-count">0</b></span>
+      </div>
+    </div>
+    <div id="player-portrait" title="Ember Knight">EK</div>
+    <button id="end-turn" type="button">End Turn ⏎</button>
+  </section>
+</div>
+
+<div id="title-screen" class="overlay">
+  <div class="overlay-card">
+    <p class="overlay-kicker">A TURN-BASED CARD BATTLER</p>
+    <h1>EMBER<br>DUEL</h1>
+    <p class="overlay-sub">The Cinder Witch has stolen the last ember of the valley.
+      Duel her card for card — spend mana, guard the flame, and douse her before yours goes out.</p>
+    <button id="start-button" type="button">Begin the Duel</button>
+    <div class="how-to">
+      <h2>How to play</h2>
+      <ul>
+        <li>Click a card to play it. Cards cost mana; your mana grows every round.</li>
+        <li><span class="suit-demo suit-attack">▲</span> Attack deals damage.
+          <span class="suit-demo suit-guard">■</span> Guard blocks damage until your next turn.
+          <span class="suit-demo suit-mend">●</span> Mend restores your HP.
+          <span class="suit-demo suit-surge">◆</span> Surge gives mana or cards.</li>
+        <li>Keys <kbd>1</kbd>–<kbd>7</kbd> play a card, <kbd>Enter</kbd> ends your turn.</li>
+        <li>Reduce the Cinder Witch to 0 HP to win. If your HP hits 0, the ember fades.</li>
+      </ul>
+    </div>
+    <p class="overlay-foot">Original game · built for the make.fun best card game bounty</p>
+  </div>
+</div>
+
+<div id="end-screen" class="overlay" hidden>
+  <div class="overlay-card">
+    <p class="overlay-kicker" id="end-kicker">DUEL OVER</p>
+    <h1 id="end-title">VICTORY</h1>
+    <p class="overlay-sub" id="end-text"></p>
+    <p class="overlay-stats" id="end-stats"></p>
+    <button id="again-button" type="button">Duel Again</button>
+  </div>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
